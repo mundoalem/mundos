@@ -32,6 +32,8 @@ SHELL := /bin/bash
 #
 
 ROOT_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+BUILD_DIR := $(abspath ${ROOT_DIR}/build)
+DIST_DIR := $(abspath ${ROOT_DIR}/dist)
 SRC_DIR := $(abspath ${ROOT_DIR}/src)
 
 #
@@ -58,11 +60,26 @@ all: lint scan build test
 
 .PHONY: build
 build:
-	@echo "Not yet implemented."
+	@aarch64-linux-gnu-as \
+		$(SRC_DIR)/boot.s \
+		-o $(BUILD_DIR)/boot.o
+
+	@aarch64-linux-gnu-gcc \
+		-ffreestanding \
+		-c $(SRC_DIR)/kernel.c \
+		-o $(BUILD_DIR)/kernel.o
+
+	@aarch64-linux-gnu-ld \
+		-nostdlib \
+		-T$(SRC_DIR)/linker.ld \
+		$(BUILD_DIR)/boot.o \
+		$(BUILD_DIR)/kernel.o \
+		-o $(BUILD_DIR)/kernel.elf
 
 .PHONY: clean
 clean:
-	@echo "Not yet implemented."
+	@rm -rf $(BUILD_DIR)/*.o
+	@rm -rf $(BUILD_DIR)/*.elf
 
 .PHONY: lint
 lint:
@@ -83,6 +100,14 @@ scan:
 .PHONY: reset
 reset: clean
 	@echo "Not yet implemented."
+
+.PHONY: run
+run:
+	@qemu-system-aarch64 \
+		-machine virt \
+		-cpu cortex-a57 \
+		-kernel $(BUILD_DIR)/kernel.elf \
+		-nographic
 
 .PHONY: test
 test:
