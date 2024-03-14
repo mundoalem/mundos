@@ -2,5 +2,7 @@
 # PROJECT
 #
 
+build/*
+!/build/.gitkeep
 container/devcontainer/volumes/history/*
 !container/devcontainer/volumes/history/.gitkeep
