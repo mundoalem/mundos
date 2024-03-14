@@ -74,10 +74,15 @@ USER root
 RUN export DEBIAN_FRONTEND="noninteractive" \
     && apt-get update \
     && apt-get -y install --no-install-recommends \
-        build-essential \
-        gcc-aarch64-linux-gnu \
-        binutils-aarch64-linux-gnu \
-        binutils-aarch64-linux-gnu-dbg \
+    binutils-aarch64-linux-gnu \
+    binutils-aarch64-linux-gnu-dbg \
+    build-essential \
+    gcc-aarch64-linux-gnu \
+    ipxe-qemu \
+    qemu-efi-aarch64 \
+    qemu-system-aarch64 \
+    qemu-system-common \
+    qemu-system-data \
     && apt-get autoremove -y \
     && apt-get clean autoclean -y \
     && rm -r /var/cache/* /var/lib/apt/lists/*
