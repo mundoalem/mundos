@@ -1,2 +1,2 @@
-# mundos
-The mundOS.
+# mundOS
+The mundOS operating system.

@@ -1,0 +1,6 @@
+#
+# PROJECT
+#
+
+container/devcontainer/volumes/history/*
+!container/devcontainer/volumes/history/.gitkeep
