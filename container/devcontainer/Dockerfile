@@ -78,6 +78,7 @@ RUN export DEBIAN_FRONTEND="noninteractive" \
     binutils-aarch64-linux-gnu-dbg \
     build-essential \
     gcc-aarch64-linux-gnu \
+    gdb \
     ipxe-qemu \
     qemu-efi-aarch64 \
     qemu-system-aarch64 \
