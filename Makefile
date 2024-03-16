@@ -31,10 +31,10 @@ SHELL := /bin/bash
 # Directories
 #
 
-ROOT_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
-BUILD_DIR := $(abspath ${ROOT_DIR}/build)
-DIST_DIR := $(abspath ${ROOT_DIR}/dist)
-SRC_DIR := $(abspath ${ROOT_DIR}/src)
+BUILD_DIR := build
+CONFIG_DIR := config
+DIST_DIR := dist
+SRC_DIR := src
 
 #
 # Project: General
@@ -51,6 +51,12 @@ PROJECT_VERSION ?= $(strip \
 	) \
 )
 
+#
+# Project: QEMU
+#
+
+PROJECT_CPU_KIND ?= "cortex-a57"
+
 # ######################################################################################################################
 # TARGETS
 # ######################################################################################################################
@@ -62,24 +68,24 @@ all: lint scan build test
 build:
 	@aarch64-linux-gnu-as \
 		$(SRC_DIR)/boot.s \
+		-g \
 		-o $(BUILD_DIR)/boot.o
 
-	@aarch64-linux-gnu-gcc \
-		-ffreestanding \
-		-c $(SRC_DIR)/kernel.c \
+	@aarch64-linux-gnu-as \
+		$(SRC_DIR)/kernel.s \
+		-g \
 		-o $(BUILD_DIR)/kernel.o
 
 	@aarch64-linux-gnu-ld \
 		-nostdlib \
-		-T$(SRC_DIR)/linker.ld \
-		$(BUILD_DIR)/boot.o \
-		$(BUILD_DIR)/kernel.o \
-		-o $(BUILD_DIR)/kernel.elf
+		-T$(CONFIG_DIR)/linker.ld \
+		$(BUILD_DIR)/*.o \
+		-o $(DIST_DIR)/mundos.elf
 
 .PHONY: clean
 clean:
 	@rm -rf $(BUILD_DIR)/*.o
-	@rm -rf $(BUILD_DIR)/*.elf
+	@rm -rf $(DIST_DIR)/*.elf
 
 .PHONY: lint
 lint:
@@ -105,8 +111,8 @@ reset: clean
 run:
 	@qemu-system-aarch64 \
 		-machine virt \
-		-cpu cortex-a57 \
-		-kernel $(BUILD_DIR)/kernel.elf \
+		-cpu $(PROJECT_CPU_KIND) \
+		-kernel $(DIST_DIR)/mundos.elf \
 		-nographic
 
 .PHONY: test
