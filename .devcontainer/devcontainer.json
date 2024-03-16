@@ -1,0 +1,43 @@
+{
+    "name": "mundOS",
+    "postAttachCommand": "./.devcontainer/hooks/post_attach.sh",
+    "remoteUser": "dev",
+
+    "build": {
+      "dockerfile": "../container/devcontainer/Dockerfile",
+      "context": ".."
+    },
+
+    "customizations": {
+      "vscode": {
+        "extensions": [
+          "dan-c-underwood.arm",
+          "eamodio.gitlens",
+          "EditorConfig.EditorConfig",
+          "jetmartin.bats",
+          "ms-azuretools.vscode-docker"
+        ],
+        "settings": {
+          "editor.defaultFormatter": "ms-azuretools.vscode-docker",
+          "editor.formatOnSave": true,
+          "editor.rulers": [
+            80,
+            120
+          ],
+          "git.enableCommitSigning": true,
+          "terminal.integrated.defaultProfile.linux": "bash",
+          "terminal.integrated.profiles.linux": {
+            "bash": {
+              "path": "/usr/bin/bash"
+            }
+          },
+          "terminal.integrated.shellIntegration.decorationsEnabled": "never"
+        }
+      }
+    },
+
+    "mounts": [
+      "type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock",
+      "type=bind,consistency=cached,source=${localWorkspaceFolder}/container/devcontainer/volumes/history,target=/home/dev/.history"
+    ]
+  }
