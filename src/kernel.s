@@ -8,11 +8,10 @@ banner:     .asciz  "mundOS v1.0.0\n"
 .text
 
 print:
-    ldr     x2,    [x0]
+    ldr     x2,    [x0],    #1
     cmp     x2,     #0
     beq     end
     strb    w2,    [x1]
-    add     x0,     x0,     #1
     bl      print
 
 end:
