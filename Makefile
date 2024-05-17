@@ -71,9 +71,9 @@ build:
 		-g \
 		-o $(BUILD_DIR)/boot.o
 
-	@aarch64-linux-gnu-as \
-		$(SRC_DIR)/kernel.s \
-		-g \
+	@aarch64-linux-gnu-gcc \
+		-ffreestanding \
+		-c $(SRC_DIR)/kernel.c \
 		-o $(BUILD_DIR)/kernel.o
 
 	@aarch64-linux-gnu-ld \

@@ -18,5 +18,5 @@ You should have received a copy of the GNU Affero General Public License along w
 _start:
     ldr x30, =stack_top
     mov sp, x30
-    bl _kernel
+    bl kmain
     b .
